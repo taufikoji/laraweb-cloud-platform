@@ -1,4 +1,5 @@
 # AGENTS.md
+
 # Laraweb Cloud Platform
 
 Version: 1.0
@@ -7,37 +8,38 @@ Version: 1.0
 
 # Mission
 
-Laraweb Cloud Platform (LCP) is the central platform for managing every Laraweb software product.
+Laraweb Cloud Platform (LCP) is a production-grade SaaS platform designed to become the central management system for every Laraweb software product.
 
-This project is NOT merely a license server.
+This project is not simply a licensing server.
 
-It is a SaaS Vendor Management Platform designed to manage:
+Its long-term mission is to manage:
 
 - Customers
 - Products
 - Licenses
 - Activation Requests
+- Updates
 - Downloads
-- Releases
 - Billing
-- Support
+- Notifications
 - Analytics
-- Future Laraweb products
+- Future Laraweb services
 
-Every Laraweb application must integrate with this platform instead of implementing its own licensing system.
+Every Laraweb application should integrate with this platform instead of implementing its own licensing system.
 
 ---
 
 # Product Owner
 
-Product Owner:
+Product Owner
+
 Taofik Faoji
 
-The Product Owner defines business requirements.
+Business requirements are defined by the Product Owner.
 
-Never change business rules without explicit approval.
+Never invent or modify business rules without explicit approval.
 
-When requirements are ambiguous, ask for clarification instead of making assumptions.
+If requirements are unclear, ask before implementing.
 
 ---
 
@@ -45,13 +47,14 @@ When requirements are ambiguous, ask for clarification instead of making assumpt
 
 You are a Senior Software Engineer.
 
-Your responsibilities:
+Your responsibilities are:
 
-- Write clean production-ready code.
-- Protect long-term maintainability.
-- Follow this document.
+- Build production-ready software.
+- Follow the project architecture.
 - Respect sprint boundaries.
-- Never invent business requirements.
+- Maintain clean code.
+- Improve maintainability.
+- Never sacrifice architecture for speed.
 
 ---
 
@@ -66,44 +69,36 @@ Priority order:
 5. Performance
 6. Features
 
-Never sacrifice architecture just to deliver a feature faster.
+Features are always the lowest priority.
 
 ---
 
 # Technology Stack
 
+Backend
+
 - Laravel 11
 - PHP 8.3+
+
+Frontend
+
 - Filament 3
 - Livewire
-- MariaDB / MySQL
-- Redis (future)
-- Queue
-- Scheduler
-- REST API
-- Tailwind CSS
+- TailwindCSS
 
----
+Database
 
-# Project Structure
+- MariaDB
 
-Follow Laravel conventions.
+Deployment
 
-Additional folders:
+- Ubuntu
+- Apache
+- HestiaCP
 
-app/
-    Services/
-    Actions/
-    Contracts/
-    DTOs/
-    Enums/
-    Support/
+Version Control
 
-docs/
-
-tests/
-
-Do not create unnecessary folders.
+- GitHub
 
 ---
 
@@ -119,13 +114,32 @@ Authorization belongs inside Policies.
 
 Events should be used for important domain events.
 
-Avoid duplicated code.
-
 Prefer dependency injection.
+
+Avoid duplicated logic.
+
+Prefer composition over inheritance.
 
 Use enums for all fixed statuses.
 
-Use UUID where appropriate.
+---
+
+# Folder Structure
+
+Follow Laravel conventions.
+
+Additional application folders:
+
+app/
+
+- Services
+- Actions
+- Contracts
+- DTOs
+- Enums
+- Support
+
+Do not create unnecessary folders.
 
 ---
 
@@ -133,15 +147,17 @@ Use UUID where appropriate.
 
 Always create migrations.
 
-Never modify old migrations once committed.
+Never edit historical migrations after commit.
 
-Always create foreign keys.
+Always use foreign keys.
 
-Add indexes when appropriate.
+Add indexes where appropriate.
 
-Use factories.
+Use UUID when appropriate.
 
-Use seeders.
+Create factories.
+
+Create seeders.
 
 Support repeatable installations.
 
@@ -156,32 +172,31 @@ Follow:
 
 Always:
 
-- use type declarations
-- use return types
+- declare parameter types
+- declare return types
 - use constructor injection
-- avoid static helpers when dependency injection is possible
+- use descriptive method names
 
 Never:
 
 - duplicate business logic
 - place business logic inside controllers
 - place business logic inside Filament Resources
+- leave debugging code in production
 
 ---
 
 # Filament Rules
 
-Every Resource should support:
+Every Resource should provide:
 
 - Search
-- Filters
 - Sorting
-- Actions
+- Filters
 - Bulk Actions
+- Validation
 
-Whenever possible:
-
-- Soft Deletes
+Soft Deletes should be used whenever appropriate.
 
 Dashboard widgets should remain lightweight.
 
@@ -192,43 +207,19 @@ Dashboard widgets should remain lightweight.
 Never commit:
 
 - passwords
-- API secrets
+- API keys
+- secrets
 - production credentials
 - customer data
 
 Always:
 
 - hash passwords
-- validate input
-- authorize actions
+- validate every request
+- authorize sensitive actions
 - sanitize uploads
 
 Never trust client input.
-
----
-
-# License System Rules
-
-License management is one of the most important modules.
-
-License verification must support:
-
-- Customer
-- Product
-- License Key
-- Domain
-- Installation ID
-- Machine Fingerprint (future)
-- Activation Limit
-- Expiration
-- Revocation
-- Grace Period (future)
-
-License generation must always use:
-
-LicenseKeyGenerator
-
-Do not duplicate license generation logic.
 
 ---
 
@@ -236,23 +227,19 @@ Do not duplicate license generation logic.
 
 REST API only.
 
-Always return JSON.
+Return JSON.
 
 Standard response:
 
 {
-    "success": true,
-    "message": "...",
-    "data": {},
-    "errors": [],
-    "timestamp": ""
+  "success": true,
+  "message": "",
+  "data": {},
+  "errors": [],
+  "timestamp": ""
 }
 
 Never expose internal exceptions.
-
-Use API Resources.
-
-Version APIs whenever necessary.
 
 ---
 
@@ -260,11 +247,12 @@ Version APIs whenever necessary.
 
 Always log:
 
-- activation request
-- license activation
-- license revoke
-- license suspension
-- login failures
+- login
+- logout
+- activation
+- revocation
+- suspension
+- failed verification
 - administrative actions
 
 Never log:
@@ -281,23 +269,18 @@ Whenever architecture changes:
 
 Update:
 
-README.md
+- README.md
+- ARCHITECTURE.md
+- DATABASE.md
+- API_GUIDE.md
 
-Relevant docs/
-
-Deployment documentation
-
-API documentation
-
-Never leave documentation outdated.
+Documentation is part of the implementation.
 
 ---
 
 # Testing Rules
 
-Every sprint must be runnable.
-
-Minimum validation:
+Every sprint must successfully complete:
 
 composer install
 
@@ -309,36 +292,34 @@ php artisan db:seed
 
 Verify:
 
-- Filament loads
-- Dashboard loads
-- CRUD works
+- Filament login
+- Dashboard
+- CRUD operations
 - No runtime errors
+
+Never consider a sprint complete before validation.
 
 ---
 
 # Definition of Done
 
-A sprint is NOT complete until:
+A sprint is complete only when:
 
 ✓ Composer installs successfully
 
 ✓ Database migrates successfully
 
-✓ Seeder executes successfully
+✓ Seeders execute successfully
 
 ✓ Filament login works
 
-✓ Dashboard works
-
 ✓ CRUD works
 
-✓ No runtime errors
+✓ No runtime exceptions remain
 
 ✓ Documentation updated
 
-✓ Git commit created
-
-Never mark a sprint complete before all items pass.
+✓ Git committed
 
 ---
 
@@ -352,27 +333,22 @@ Use meaningful commit messages.
 
 Never commit broken code.
 
-Never commit debugging artifacts.
-
 Never commit commented production code.
+
+Never leave TODO items without explanation.
 
 ---
 
 # Deployment Rules
 
-Target environment:
+Production environment:
 
-Ubuntu
+- Ubuntu
+- Apache
+- HestiaCP
+- MariaDB
 
-HestiaCP
-
-Apache
-
-PHP-FPM
-
-MariaDB
-
-Deployment process:
+Deployment flow:
 
 git pull
 
@@ -390,71 +366,50 @@ Deployment must never destroy production data.
 
 # Sprint Rules
 
-Implement ONLY the current sprint.
+Implement only the active sprint.
 
-Never start the next sprint until:
+Never implement future modules without approval.
 
-Current sprint passes validation.
+Current Sprint:
 
-Sprint 1:
+Sprint 1
+
+Allowed modules:
 
 - Authentication
 - Dashboard
-- Customers
-- Products
-- Licenses
+- Customer Management
+- Product Management
+- License Management
 - Activation Requests
 - Activity Logs
 
-Do NOT implement future modules unless explicitly requested.
+Future modules remain out of scope.
 
 ---
 
-# Future Modules
-
-Future modules include:
-
-- Billing
-- Invoices
-- Downloads
-- Update Center
-- Support Tickets
-- Notifications
-- Analytics
-- Marketplace
-- Team Management
-- Reseller
-- White Label
-
-These modules belong to future sprints.
-
----
-
-# AI Collaboration
+# AI Collaboration Rules
 
 Before writing code:
 
 1. Read AGENTS.md
 2. Read README.md
-3. Read relevant documentation
-4. Verify current sprint scope
+3. Read PROJECT_ROADMAP.md
+4. Read ARCHITECTURE.md
+5. Verify current sprint
 
 Never assume architecture.
 
-Never rewrite major architecture without approval.
+Never rewrite large parts of the project without approval.
 
-Never implement features outside the sprint.
+When uncertain:
 
-If unsure:
-
-Ask instead of guessing.
+Ask.
 
 ---
 
 # Long-Term Goal
 
-Build Laraweb Cloud Platform as a production-grade SaaS platform capable of managing all Laraweb software products from a single dashboard.
+Build Laraweb Cloud Platform into a scalable SaaS platform capable of managing every Laraweb software product from one centralized dashboard.
 
-Every implementation should move the project toward that goal.
-
-Quality is always more important than speed.
+Every implementation should move the project closer to that vision.
